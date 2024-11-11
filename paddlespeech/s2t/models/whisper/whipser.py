@@ -108,11 +108,11 @@ class MultiHeadAttention(nn.Layer):
         n_batch, n_ctx, n_state = q.shape
         scale = (n_state // self.n_head)**-0.25
         q = paddle.transpose(
-            q.view(*q.shape[:2], self.n_head, -1), (0, 2, 1, 3)) * scale
+            q.reshape([*q.shape[:2], self.n_head, -1]), (0, 2, 1, 3)) * scale
         k = paddle.transpose(
-            k.view(*k.shape[:2], self.n_head, -1), (0, 2, 3, 1)) * scale
+            k.reshape([*k.shape[:2], self.n_head, -1]), (0, 2, 3, 1)) * scale
         v = paddle.transpose(
-            v.view(*v.shape[:2], self.n_head, -1), (0, 2, 1, 3))
+            v.reshape([*v.shape[:2], self.n_head, -1]), (0, 2, 1, 3))
 
         qk = q @ k
         if mask is not None:
@@ -822,7 +822,7 @@ class BeamSearchDecoder(TokenDecoder):
         if self.finished_sequences is None:  # for the first update
             self.finished_sequences = [{} for _ in range(batch_size)]
 
-        logprobs = F.log_softmax(logits, axis=-1, dtype=paddle.float32)
+        logprobs = F.log_softmax(logits, axis=-1, dtype='float32')
         next_tokens, source_indices, finished_sequences = [], [], []
         for i in range(batch_size):
             scores, sources, finished = {}, {}, {}
@@ -834,8 +834,8 @@ class BeamSearchDecoder(TokenDecoder):
                 logprob, token = paddle.topk(
                     logprobs[idx], k=self.beam_size + 1)
                 for logprob, token in zip(logprob, token):
-                    new_logprob = (sum_logprobs[idx] + logprob).tolist()[0]
-                    sequence = tuple(prefix + [token.tolist()[0]])
+                    new_logprob = sum_logprobs[idx] + logprob
+                    sequence = tuple(prefix + [token])
                     scores[sequence] = new_logprob
                     sources[sequence] = idx
 
@@ -968,7 +968,7 @@ class ApplyTimestampRules(LogitFilter):
             logits[:, last_allowed + 1:] = -np.inf
 
         # if sum of probability over timestamps is above any other token, sample timestamp
-        logprobs = F.log_softmax(logits, axis=-1, dtype=paddle.float32)
+        logprobs = F.log_softmax(logits, axis=-1, dtype='float32')
         for k in range(tokens.shape[0]):
             timestamp_logprob = paddle.logsumexp(
                 logprobs[k, self.tokenizer.timestamp_begin:], axis=-1)
@@ -1145,6 +1145,7 @@ class DecodingTask:
         sum_logprobs: paddle.Tensor = paddle.zeros(
             paddle.to_tensor(n_batch), dtype=paddle.float32)
         no_speech_probs = [np.nan] * n_batch
+        print(sum_logprobs)
 
         try:
             for i in range(self.sample_len):
