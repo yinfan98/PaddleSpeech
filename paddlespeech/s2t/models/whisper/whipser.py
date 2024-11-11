@@ -1145,7 +1145,6 @@ class DecodingTask:
         sum_logprobs: paddle.Tensor = paddle.zeros(
             paddle.to_tensor(n_batch), dtype=paddle.float32)
         no_speech_probs = [np.nan] * n_batch
-        print(sum_logprobs)
 
         try:
             for i in range(self.sample_len):
