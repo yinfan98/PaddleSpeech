@@ -24,7 +24,7 @@ from scipy.special import softmax
 # yapf: disable
 parser = argparse.ArgumentParser()
 parser.add_argument("--model_dir", type=str, required=True, default="./export", help="The directory to static model.")
-parser.add_argument('--device', choices=['cpu', 'gpu', 'xpu'], default="gpu", help="Select which device to train model, defaults to gpu.")
+parser.add_argument('--device', choices=['cpu', 'gpu', 'xpu', 'gcu'], default="gpu", help="Select which device to train model, defaults to gpu.")
 parser.add_argument("--wav", type=str, required=True, help="Audio file to infer.")
 parser.add_argument("--batch_size", type=int, default=1, help="Batch size per GPU/CPU for training.")
 parser.add_argument('--use_tensorrt', type=eval, default=False, choices=[True, False], help='Enable to use tensorrt to speed up.')

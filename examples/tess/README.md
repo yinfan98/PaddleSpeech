@@ -30,5 +30,5 @@ TESS音频情绪分类任务。
 $ CUDA_VISIBLE_DEVICES=0 ./run.sh 1 conf/panns_mfcc.yaml
 $ CUDA_VISIBLE_DEVICES=0 ./run.sh 1 conf/panns_logmelspectrogram.yaml
 $ CUDA_VISIBLE_DEVICES=0 ./run.sh 1 conf/panns_melspectrogram.yaml
-$ CUDA_VISIBLE_DEVICES=0 ./run.sh 1 conf/panns_pectrogram.yaml
+$ CUDA_VISIBLE_DEVICES=0 ./run.sh 1 conf/panns_spectrogram.yaml
 ```

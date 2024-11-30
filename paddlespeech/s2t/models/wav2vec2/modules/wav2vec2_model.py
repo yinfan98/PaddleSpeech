@@ -714,13 +714,13 @@ class MultiheadAttention(nn.Layer):
             else:
                 if self.beam_size > 1 and bsz == key.size(1):
                     # key is [T, bsz*beam_size, C], reduce to [T, bsz, C]
-                    key = key.view(
-                        key.size(0), -1, self.beam_size,
-                        key.size(2))[:, :, 0, :]
+                    key = key.reshape(
+                        [key.size(0), -1, self.beam_size,
+                         key.size(2)])[:, :, 0, :]
                     if key_padding_mask is not None:
-                        key_padding_mask = key_padding_mask.view(
-                            -1, self.beam_size,
-                            key_padding_mask.size(1))[:, 0, :]
+                        key_padding_mask = key_padding_mask.reshape(
+                            [-1, self.beam_size,
+                             key_padding_mask.size(1)])[:, 0, :]
                 k = self.k_proj(key)
                 v = self.v_proj(key)
 
@@ -1476,7 +1476,7 @@ def compute_mask_indices(
                 lens = np.fromiter(
                     (e - s if e - s >= length + min_space else 0
                      for s, e in parts),
-                    np.int, )
+                    np.int_, )
                 l_sum = np.sum(lens)
                 if l_sum == 0:
                     break

@@ -84,13 +84,13 @@ class HubertASR(nn.Layer):
     def forward(self, wav, wavs_lens_rate, target, target_lens):
 
         if self.normalize_wav:
-            wav = F.layer_norm(wav, wav.shape)
+            wav = F.layer_norm(wav, wav.shape[1:])
 
         # Extract wav2vec output
         out = self.hubert.extract_features(wav)[0]
         # We normalize the output if required
         if self.output_norm:
-            out = F.layer_norm(out, out.shape)
+            out = F.layer_norm(out, out.shape[1:])
 
         if self.training and hasattr(self.config, 'spec_augment'):
             feats = self.spec_augment(out)

@@ -7,6 +7,13 @@
 ### 下载并解压
 从 [官方网站](https://wenet.org.cn/opencpop/download/) 下载数据集
 
+### pip 安装
+<!-- 注释: 因为ppdiffusion会安装最新的huggingface_hub，但cached_download功能已被删除，所以需要安装指定的版本。>
+<!-- 待完成: 如果相应的依赖库正常，则将其删除。-->
+```shell
+pip install huggingface_hub==0.25.2
+```
+
 ## 开始
 假设数据集的路径是 `~/datasets/Opencpop`.
 运行下面的命令会进行如下操作：

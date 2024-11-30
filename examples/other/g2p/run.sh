@@ -16,5 +16,5 @@ python3 test_g2p.py --input-dir=data/g2p --output-dir=exp/g2p
 # whether use sclite to get more detail information of WER
 if [ "$USE_SCLITE" = true ];then
     echo "Start sclite g2p ..."
-    ${MAIN_ROOT}/tools/sctk/bin/sclite -i wsj -r ./exp/g2p/text.ref.clean trn -h ./exp/g2p/text.g2p trn -e utf-8 -o all
+    ${MAIN_ROOT}/tools/extras/sctk/bin/sclite -i wsj -r ./exp/g2p/text.ref.clean trn -h ./exp/g2p/text.g2p trn -e utf-8 -o all
 fi

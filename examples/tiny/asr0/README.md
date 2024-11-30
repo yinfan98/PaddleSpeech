@@ -51,7 +51,7 @@ You can set the local variables (except `ckpt`)  when you use the `run.sh`
 
 For example, you can set the `gpus` and `avg_num` when you use the command line.:
 ```bash
-bash run.sh --gpus 0,1 --avg_num 20
+bash run.sh --gpus 0,1 --avg_num 1
 ```
 ## Stage 0: Data processing
 To use this example, you need to process data firstly and you can use stage 0 in the `run.sh` to do this. The code is shown below:
@@ -134,7 +134,7 @@ The test stage is to evaluate the model performance. The code of the test stage 
 ```bash
  if [ ${stage} -le 3 ] && [ ${stop_stage} -ge 3 ]; then
      # test ckpt avg_n
-     CUDA_VISIBLE_DEVICES=0 ./local/test.sh ${conf_path} exp/${ckpt}/checkpoints/${avg_ckpt} || exit -1
+     CUDA_VISIBLE_DEVICES=${gpus} ./local/test.sh ${conf_path} ${decode_conf_path} exp/${ckpt}/checkpoints/${avg_ckpt}|| exit -1
  fi
 ```
 If you want to train a model and test it,  you can use the script below to execute stage 0, stage 1,  stage 2, and stage 3 :
@@ -147,7 +147,7 @@ source path.sh
 bash ./local/data.sh
 CUDA_VISIBLE_DEVICES= ./local/train.sh conf/deepspeech2.yaml deepspeech2
 avg.sh best exp/deepspeech2/checkpoints 1
-CUDA_VISIBLE_DEVICES= ./local/test.sh conf/deepspeech2.yaml exp/deepspeech2/checkpoints/avg_1
+CUDA_VISIBLE_DEVICES= ./local/test.sh conf/deepspeech2.yaml conf/tuning/decode.yaml exp/deepspeech2/checkpoints/avg_1
 ```
 ## Stage 4: Static graph model Export
 This stage is to transform dygraph to static graph.
